@@ -44,18 +44,13 @@ const Dot = styled.div`
 `;
 
 function App() {
-    // default 0, max 12, 4 rounds is 1 goal
     const [goal, setGoal] = useState<number>(0);
-
-    // default 0, max 4
     const [round, setRound] = useState<number>(0);
-
-    // status of timer
     const [isPlaying, setIsPlaying] = useRecoilState(IsPlaying);
 
     const [seconds, setSeconds] = useState(0);
     const [minutes, setMinutes] = useState(25);
-    const [timeSeconds, setTimeSeconds] = useState(25 * 60 * 1);
+    const [timeSeconds, setTimeSeconds] = useState(1 * 60 * 1);
 
     const [minScope, minAnimate] = useAnimate();
     const [secScope, secAnimate] = useAnimate();
@@ -64,9 +59,10 @@ function App() {
 
     useEffect(() => {
         timeCalculator();
-        console.log(`total left time: ${timeSeconds}`);
-        console.log(`min: ${minutes}`);
-        console.log(`sec: ${seconds}`);
+
+        if (timeSeconds <= 0) {
+            setIsPlaying(false);
+        }
     }, [timeSeconds]);
 
     useEffect(() => {
@@ -85,12 +81,31 @@ function App() {
     function timeCalculator() {
         let min = Math.floor(timeSeconds / 60);
         let sec = timeSeconds % 60;
+        if (min === 0 && sec === 0) min = 25;
         setMinutes(min);
         setSeconds(sec);
+        if (min !== minutes) minBoxAnimation();
+        if (sec !== seconds) secBoxAnimation();
     }
 
     function dereaseTime() {
         setTimeSeconds((prev) => prev - 1);
+    }
+
+    function secBoxAnimation() {
+        secAnimate(
+            secScope.current,
+            { scale: [0.5, 1] },
+            { type: "spring", stiffness: 260, damping: 20 }
+        );
+    }
+
+    function minBoxAnimation() {
+        minAnimate(
+            minScope.current,
+            { scale: [0.5, 1] },
+            { type: "spring", stiffness: 260, damping: 20 }
+        );
     }
 
     return (
@@ -113,8 +128,6 @@ function App() {
                         type: "spring",
                         stiffness: 260,
                         damping: 20,
-                        // repeat: Infinity,
-                        // repeatDelay: 1 * 60,
                     }}
                 >
                     {minutes}
@@ -131,8 +144,6 @@ function App() {
                         type: "spring",
                         stiffness: 260,
                         damping: 20,
-                        // repeat: Infinity,
-                        // repeatDelay: 1,
                     }}
                 >
                     {String(seconds).padStart(2, "0")}
