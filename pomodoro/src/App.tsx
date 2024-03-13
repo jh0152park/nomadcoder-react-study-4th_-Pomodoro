@@ -79,7 +79,7 @@ function App() {
                 setRound((prev) => prev + 1);
             }
         }
-    }, [timeSeconds, round, goal]);
+    }, [timeSeconds]);
 
     /* eslint-disable */
     useEffect(() => {
@@ -89,7 +89,7 @@ function App() {
         } else {
             clearInterval(intervalId);
         }
-    }, [isPlaying, intervalId]);
+    }, [isPlaying]);
 
     function togglePlaying() {
         setIsPlaying((prev) => !prev);
