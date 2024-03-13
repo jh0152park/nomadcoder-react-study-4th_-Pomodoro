@@ -78,7 +78,7 @@ function App() {
                 setRound((prev) => prev + 1);
             }
         }
-    }, [timeSeconds, round, goal]);
+    }, [timeSeconds, round, goal, timeCalculator, setIsPlaying]);
 
     useEffect(() => {
         if (isPlaying) {
@@ -87,7 +87,7 @@ function App() {
         } else {
             clearInterval(intervalId);
         }
-    }, [isPlaying]);
+    }, [isPlaying, intervalId]);
 
     function togglePlaying() {
         setIsPlaying((prev) => !prev);
