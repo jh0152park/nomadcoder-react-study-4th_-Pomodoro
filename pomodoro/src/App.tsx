@@ -43,14 +43,16 @@ const Dot = styled.div`
     background-color: rgba(255, 255, 255, 0.7);
 `;
 
+const MIN = 25;
+
 function App() {
     const [goal, setGoal] = useState<number>(0);
     const [round, setRound] = useState<number>(0);
     const [isPlaying, setIsPlaying] = useRecoilState(IsPlaying);
 
     const [seconds, setSeconds] = useState(0);
-    const [minutes, setMinutes] = useState(25);
-    const [timeSeconds, setTimeSeconds] = useState(1 * 60 * 1);
+    const [minutes, setMinutes] = useState(MIN);
+    const [timeSeconds, setTimeSeconds] = useState(MIN * 60 * 1);
 
     const [minScope, minAnimate] = useAnimate();
     const [secScope, secAnimate] = useAnimate();
@@ -62,6 +64,19 @@ function App() {
 
         if (timeSeconds <= 0) {
             setIsPlaying(false);
+            setTimeSeconds(MIN * 60 * 1);
+
+            if (round === 3) {
+                setRound(0);
+                if (goal < 12) {
+                    setGoal((prev) => prev + 1);
+                } else {
+                    setGoal(0);
+                    setRound(0);
+                }
+            } else {
+                setRound((prev) => prev + 1);
+            }
         }
     }, [timeSeconds]);
 
@@ -81,7 +96,7 @@ function App() {
     function timeCalculator() {
         let min = Math.floor(timeSeconds / 60);
         let sec = timeSeconds % 60;
-        if (min === 0 && sec === 0) min = 25;
+        if (min === 0 && sec === 0) min = MIN;
         setMinutes(min);
         setSeconds(sec);
         if (min !== minutes) minBoxAnimation();
