@@ -1,3 +1,4 @@
+// .**eslintignore**
 import styled from "styled-components";
 import { motion, useAnimate } from "framer-motion";
 import { HStack, Text, VStack } from "@chakra-ui/react";
@@ -78,7 +79,7 @@ function App() {
                 setRound((prev) => prev + 1);
             }
         }
-    }, [timeSeconds, round, goal, timeCalculator, setIsPlaying]);
+    }, [timeSeconds, round, goal]);
 
     useEffect(() => {
         if (isPlaying) {
