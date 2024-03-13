@@ -14,3 +14,8 @@ nomadcoder-react-study-4th\_ Pomodoro
 -   Four rounds should equal one goal.
 -   When the timer reaches 00:00, reset the time, and increase the number of rounds completed by 1.
 -   When the user completes 4 rounds, increase the number of goals counter and reset the rounds counter.
+
+# Working Video
+
+https://github.com/jh0152park/nomadcoder-react-study-4th_Pomodoro/assets/118165975/71dfb641-0df2-4a87-bdd9-2013d98b5655
+
