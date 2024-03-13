@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, useAnimate } from "framer-motion";
 import { HStack, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa6";
 import { useRecoilState } from "recoil";
-import { Minutes, Seconds } from "./global";
+import { IsPlaying } from "./global";
 
 const TimeBox = styled(motion.div)`
     width: 230px;
@@ -44,18 +44,53 @@ const Dot = styled.div`
 `;
 
 function App() {
-    // default 0, max 4
-    const [round, setRound] = useState<number>(0);
     // default 0, max 12, 4 rounds is 1 goal
     const [goal, setGoal] = useState<number>(0);
-    // status of timer
-    const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-    const [minutes, setMinutes] = useRecoilState(Minutes);
-    const [seconds, setSeconds] = useRecoilState(Seconds);
+    // default 0, max 4
+    const [round, setRound] = useState<number>(0);
+
+    // status of timer
+    const [isPlaying, setIsPlaying] = useRecoilState(IsPlaying);
+
+    const [seconds, setSeconds] = useState(0);
+    const [minutes, setMinutes] = useState(25);
+    const [timeSeconds, setTimeSeconds] = useState(25 * 60 * 1);
+
+    const [minScope, minAnimate] = useAnimate();
+    const [secScope, secAnimate] = useAnimate();
+
+    const [intervalId, setIntervalId] = useState();
+
+    useEffect(() => {
+        timeCalculator();
+        console.log(`total left time: ${timeSeconds}`);
+        console.log(`min: ${minutes}`);
+        console.log(`sec: ${seconds}`);
+    }, [timeSeconds]);
+
+    useEffect(() => {
+        if (isPlaying) {
+            const timerId = setInterval(dereaseTime, 1000);
+            setIntervalId(timerId as any);
+        } else {
+            clearInterval(intervalId);
+        }
+    }, [isPlaying]);
 
     function togglePlaying() {
         setIsPlaying((prev) => !prev);
+    }
+
+    function timeCalculator() {
+        let min = Math.floor(timeSeconds / 60);
+        let sec = timeSeconds % 60;
+        setMinutes(min);
+        setSeconds(sec);
+    }
+
+    function dereaseTime() {
+        setTimeSeconds((prev) => prev - 1);
     }
 
     return (
@@ -71,9 +106,16 @@ function App() {
             </Text>
             <HStack w="100%" justifyContent="center">
                 <TimeBox
+                    ref={minScope}
                     initial={{ scale: 0.5 }}
                     animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                    transition={{
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 20,
+                        // repeat: Infinity,
+                        // repeatDelay: 1 * 60,
+                    }}
                 >
                     {minutes}
                 </TimeBox>
@@ -82,11 +124,18 @@ function App() {
                     <Dot />
                 </VStack>
                 <TimeBox
+                    ref={secScope}
                     initial={{ scale: 0.5 }}
                     animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                    transition={{
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 20,
+                        // repeat: Infinity,
+                        // repeatDelay: 1,
+                    }}
                 >
-                    {seconds + "".padStart(1, "0")}
+                    {String(seconds).padStart(2, "0")}
                 </TimeBox>
             </HStack>
 
