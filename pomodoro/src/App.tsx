@@ -4,6 +4,8 @@ import { HStack, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa6";
+import { useRecoilState } from "recoil";
+import { Minutes, Seconds } from "./global";
 
 const TimeBox = styled(motion.div)`
     width: 230px;
@@ -11,6 +13,12 @@ const TimeBox = styled(motion.div)`
     border-radius: 20px;
     background-color: whitesmoke;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+    color: #6e53d8;
+    font-weight: bold;
+    font-size: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Button = styled(motion.div)`
@@ -43,6 +51,9 @@ function App() {
     // status of timer
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
+    const [minutes, setMinutes] = useRecoilState(Minutes);
+    const [seconds, setSeconds] = useRecoilState(Seconds);
+
     function togglePlaying() {
         setIsPlaying((prev) => !prev);
     }
@@ -53,17 +64,18 @@ function App() {
                 fontWeight="bold"
                 fontSize="50px"
                 color="whitesmoke"
+                mt="20px"
                 mb="50px"
             >
                 PomoDormammu
             </Text>
             <HStack w="100%" justifyContent="center">
-                <TimeBox />
+                <TimeBox>{minutes}</TimeBox>
                 <VStack spacing="10px" mx="20px">
                     <Dot />
                     <Dot />
                 </VStack>
-                <TimeBox />
+                <TimeBox>{seconds + "".padStart(1, "0")}</TimeBox>
             </HStack>
 
             <Button onClick={togglePlaying}>
