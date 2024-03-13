@@ -78,7 +78,7 @@ function App() {
                 setRound((prev) => prev + 1);
             }
         }
-    }, [timeSeconds]);
+    }, [timeSeconds, round, goal]);
 
     useEffect(() => {
         if (isPlaying) {
