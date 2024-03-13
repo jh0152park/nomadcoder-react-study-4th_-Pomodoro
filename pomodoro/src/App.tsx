@@ -1,4 +1,3 @@
-// .**eslintignore**
 import styled from "styled-components";
 import { motion, useAnimate } from "framer-motion";
 import { HStack, Text, VStack } from "@chakra-ui/react";
@@ -60,6 +59,7 @@ function App() {
 
     const [intervalId, setIntervalId] = useState();
 
+    /* eslint-disable */
     useEffect(() => {
         timeCalculator();
 
@@ -81,6 +81,7 @@ function App() {
         }
     }, [timeSeconds, round, goal]);
 
+    /* eslint-disable */
     useEffect(() => {
         if (isPlaying) {
             const timerId = setInterval(dereaseTime, 1000);
