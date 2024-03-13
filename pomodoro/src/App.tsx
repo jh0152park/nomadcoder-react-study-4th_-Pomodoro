@@ -70,15 +70,31 @@ function App() {
                 PomoDormammu
             </Text>
             <HStack w="100%" justifyContent="center">
-                <TimeBox>{minutes}</TimeBox>
+                <TimeBox
+                    initial={{ scale: 0.5 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                >
+                    {minutes}
+                </TimeBox>
                 <VStack spacing="10px" mx="20px">
                     <Dot />
                     <Dot />
                 </VStack>
-                <TimeBox>{seconds + "".padStart(1, "0")}</TimeBox>
+                <TimeBox
+                    initial={{ scale: 0.5 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                >
+                    {seconds + "".padStart(1, "0")}
+                </TimeBox>
             </HStack>
 
-            <Button onClick={togglePlaying}>
+            <Button
+                onClick={togglePlaying}
+                whileHover={{ scale: 1.2 }}
+                transition={{ duration: 0.1 }}
+            >
                 {!isPlaying && <FaPlay size={50} color="white" />}
                 {isPlaying && <FaPause size={50} color="white" />}
             </Button>
