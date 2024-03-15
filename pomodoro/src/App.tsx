@@ -147,7 +147,7 @@ function App() {
                         damping: 20,
                     }}
                 >
-                    {minutes}
+                    {String(minutes).padStart(2, "0")}
                 </TimeBox>
                 <VStack spacing="10px" mx="20px">
                     <Dot />
